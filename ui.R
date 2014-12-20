@@ -2,22 +2,17 @@ library(shiny)
 library(dplyr)
 d1<-read.csv("Cars.csv", sep=",", header=FALSE)
 colnames(d1)<-c("buyingprice","maintcost","doors","persons","lugboot","safety","car")
+
 # Overall UI
-shinyUI(
-
-  # Use fluid bootstrap model
-  fluidPage(
-  
-    # Page Title
-    titlePanel("Car Evaluation"),
-    p("Documentation for",a("Car Evaluation", href="http://google")),
-   
-    h4("Select attributes of car"),
-
-    # Side bar panel
-      sidebarLayout(
+shinyUI(fluidPage(
+  navbarPage("NavBar ", 
+      tabPanel("Car Evaluation Project",
+       h3("Select desired attributes in a car from selections below and view car acceptability in a bar plot in the bottom on the right panel "),
+       helpText("View Project Documentation in the Documentation tab"),
+       sidebarLayout(
        sidebarPanel(
         # Display car attributes that the user needs to select from
+        h4("Select attributes of car"),
         h5("Cost of Ownership "),
         selectInput('bpr','Buying Price:', choices=sort(levels(d1$buyingprice))),
         selectInput('mac','Maintenance cost:', choices=sort(levels(d1$maintcost))),
@@ -35,8 +30,7 @@ shinyUI(
                  Acceptable(acc), 
                  Good(good), V
                  ery Good(vgood)")
-        
-    
+
       ),
     # Main panel  
     mainPanel(
@@ -49,11 +43,17 @@ shinyUI(
       h6("Capacity"),verbatimTextOutput("pe"),
       h6("Size of boot"),verbatimTextOutput("lu"),
       h6("Safety"),verbatimTextOutput("sa"),
+      
     # Plot resulting car evaluations based on user selected attributes
       h5("Bar plot below shows number of Cars & their evaluations based on your selections"),
+      helpText("Note:If no selections for checkbox inputs are made, the selection shows as NULL in the main panel;no filters are applied for that attribute in the data set i.e. all values of that attribute are considered for car evaluation"),  
       plotOutput('carplot'),
       hr()
        )
-    )
-  )
+    )    
+),
+tabPanel("Documentation",includeHTML("documentation.html")
+         )
+)
+)
 )
