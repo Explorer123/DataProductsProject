@@ -13,7 +13,7 @@ shinyUI(
     p("Documentation for",a("Car Evaluation", href="https://github.com/Explorer123/DataProductsProject/blob/master/documentation.html")),
     p("Documentation for",a("Car Evaluation", href="https://github.com/Explorer123/DataProductsProject/blob/master/documentation.md")),
     h4("Select attributes of car"),
-    h4("Select attributes of car"),
+
     # Side bar panel
       sidebarLayout(
        sidebarPanel(
