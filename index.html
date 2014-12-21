@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Evaluation Project</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Car Evaluation Project">
+  <meta name="author" content="Explorer 123, Dec 2014">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Car Evaluation Project</h1>
+    <h2>Project for Coursera Developing Data Products</h2>
+    <p>Explorer 123, Dec 2014<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Project Introduction</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This application takes desired attributes of the car, as user inputs and based on those inputs gives the  the number of cars and their acceptability in a bar plot. </p>
+
+<h4>Input:</h4>
+
+<p>Desired attributes of the car e.g. number of doors, safety Rating, maintenance cost etc.   </p>
+
+<h3>Processing:</h3>
+
+<p>Selects the Acceptaility rating of cars and number of cars with that acceptability.   </p>
+
+<h4>Result:</h4>
+
+<p>Bar plot of number of cars(Y axis) with acceptability (X axis).     Acceptability values can be:<br>
+unacc- Unacceptable<br>
+acc - Acceptable<br>
+good - Good<br>
+vgood - Very Good  </p>
+
+<p><strong>Data source for the project</strong>: <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/car/">http://archive.ics.uci.edu/ml/machine-learning-databases/car/</a>  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>R code</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Read data, filter data on attribute selections(e.g. below), get car evaluation results</p>
+
+<pre><code class="r">library(dplyr)
+d1&lt;-read.table(&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data&quot;, 
+sep=&quot;,&quot;, header=FALSE)
+colnames(d1)&lt;-c(&quot;buyingprice&quot;,&quot;maintcost&quot;,&quot;doors&quot;,&quot;persons&quot;,&quot;lugboot&quot;,&quot;safety&quot;,&quot;car&quot;)
+sub&lt;-d1 %&gt;%
+select(car,buyingprice,maintcost,doors,persons,lugboot,safety) %&gt;%
+        filter(buyingprice==&#39;med&#39; &amp; maintcost==&#39;med&#39; &amp;
+                doors %in% c(&#39;2&#39;,&#39;3&#39;) &amp; persons %in% c(&#39;2&#39;,&#39;4&#39;) &amp; 
+                lugboot %in% c(&#39;big&#39;,&#39;med&#39;) &amp; safety==&#39;high&#39;)
+agg&lt;-aggregate(sub,by=list(sub$car),FUN=length)
+agg
+</code></pre>
+
+<pre><code>##   Group.1 car buyingprice maintcost doors persons lugboot safety
+## 1     acc   2           2         2     2       2       2      2
+## 2   unacc   4           4         4     4       4       4      4
+## 3   vgood   2           2         2     2       2       2      2
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Bar Plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Bar plot shows number of Cars &amp; their evaluations[see slide 2 for possible values for the car acceptability] based on the attributes[see previous slide] selected.</p>
+
+<pre><code class="r">      barplot(agg$car,
+              ylab=&quot;Number of  cars&quot;,
+              xlab=&quot;Car Evaluaton&quot;,
+              names.arg=agg$Group.1)
+</code></pre>
+
+<p><img src="assets/fig/barplot-1.png" title="plot of chunk barplot" alt="plot of chunk barplot" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Shiny Application</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Try the Car Evaluation shiny application!</p>
+
+<iframe src="https://123explorer.shinyapps.io/datapr/"></iframe>
+
+<p>--- .class #id </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Project Introduction'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='R code'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Bar Plot'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Shiny Application'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
