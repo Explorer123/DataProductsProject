@@ -5,14 +5,15 @@ colnames(d1)<-c("buyingprice","maintcost","doors","persons","lugboot","safety","
 
 # Overall UI
 shinyUI(fluidPage(
-  navbarPage("NavBar ", 
-      tabPanel("Car Evaluation Project",
-       h3("Select desired attributes in a car from selections below and view car acceptability in a bar plot in the bottom on the right panel "),
-       helpText("View Project Documentation in the Documentation tab"),
+  navbarPage("Car Evaluation Project", 
+      tabPanel("Application",
+       h4("Select desired attributes in a car from selections below and view car acceptability in a bar plot at the bottom in the right panel "),
+       h6("View Project Documentation in the Documentation tab"),
        sidebarLayout(
        sidebarPanel(
         # Display car attributes that the user needs to select from
         h4("Select attributes of car"),
+        hr(),
         h5("Cost of Ownership "),
         selectInput('bpr','Buying Price:', choices=sort(levels(d1$buyingprice))),
         selectInput('mac','Maintenance cost:', choices=sort(levels(d1$maintcost))),
@@ -28,15 +29,14 @@ shinyUI(fluidPage(
         helpText("Plot on the right shows #of cars and their evaluations based on the selections: 
                  Unacceptable(unacc),
                  Acceptable(acc), 
-                 Good(good), V
-                 ery Good(vgood)")
+                 Good(good), Very Good(vgood)")
 
       ),
     # Main panel  
     mainPanel(
     # Display selections made by the user
       h5("Your car attribute selections:"),
-      helpText("Scroll down to see the bar plot"),
+      h6("Scroll down to see the bar plot"),
       h6("Buying Price"),verbatimTextOutput("bp"),
       h6("Maintenance Cost"),verbatimTextOutput("mc"),
       h6("# of doors"),verbatimTextOutput("do"),
@@ -46,7 +46,7 @@ shinyUI(fluidPage(
       
     # Plot resulting car evaluations based on user selected attributes
       h5("Bar plot below shows number of Cars & their evaluations based on your selections"),
-      helpText("Note:If no selections for checkbox inputs are made, the selection shows as NULL in the main panel;no filters are applied for that attribute in the data set i.e. all values of that attribute are considered for car evaluation"),  
+      helpText("Note:If no selections for checkbox inputs are made i.e selection is NULL/empty, no filters are applied for that attribute in the data set i.e. all values of that attribute are considered for car evaluation"),  
       plotOutput('carplot'),
       hr()
        )
